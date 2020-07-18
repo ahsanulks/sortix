@@ -1,4 +1,4 @@
-module github.com/ahsanulks/sort-by
+module github.com/ahsanulks/sortby
 
 go 1.13
 
