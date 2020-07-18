@@ -5,7 +5,7 @@ import (
 
 	sortby "github.com/ahsanulks/sort-by"
 	"github.com/bxcodec/faker"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/globalsign/mgo/bson"
 )
 
 type TestingData struct {
