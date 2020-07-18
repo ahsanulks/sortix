@@ -13,10 +13,6 @@ type TestingData struct {
 	Name string
 }
 
-type InvalidTestingData struct {
-	Name string
-}
-
 func createTestingData(len int) []TestingData {
 	var result []TestingData
 	for i := 0; i < len; i++ {
@@ -29,71 +25,50 @@ func createTestingData(len int) []TestingData {
 	return result
 }
 
-func createInvalidTestingData(len int) []InvalidTestingData {
-	var result []InvalidTestingData
-	for i := 0; i < len; i++ {
-		testData := InvalidTestingData{
-			Name: faker.FirstName,
-		}
-		result = append(result, testData)
-	}
-	return result
-}
-
-func TestByID(t *testing.T) {
+func TestMongoID(t *testing.T) {
 	sortingIndicatorIndex := []int{0, 2, 3, 4, 1}
 	data := createTestingData(len(sortingIndicatorIndex))
-	sortingIndicator := make(map[bson.ObjectId]int)
+	var sortingIndicator []bson.ObjectId
 	var sortedData []TestingData
-	for i, v := range sortingIndicatorIndex {
-		sortingIndicator[data[v].Id] = i
+	for _, v := range sortingIndicatorIndex {
+		sortingIndicator = append(sortingIndicator, data[v].Id)
 		sortedData = append(sortedData, data[v])
 	}
-	normalArgs := sortby.ParamSortByID{
+	normalArgs := sortby.ParamMongoID{
 		Indicator: sortingIndicator,
 		Value:     &data,
 		Reverse:   false,
 	}
-	invalidValue := sortby.ParamSortByID{
+	invalidValue := sortby.ParamMongoID{
 		Indicator: sortingIndicator,
 		Value:     data,
 		Reverse:   false,
-	}
-	invalidData := createInvalidTestingData(len(sortingIndicatorIndex))
-	invalidNotHaveField := sortby.ParamSortByID{
-		Indicator: sortingIndicator,
-		Value:     &invalidData,
-		Reverse:   false,
+		FieldName: "Id",
 	}
 	tests := []struct {
-		name  string
-		args  sortby.ParamSortByID
-		panic bool
+		name      string
+		args      sortby.ParamMongoID
+		wantError bool
 	}{
 		// TODO: Add test cases.
 		{
-			name:  "success sorting with field Id",
-			args:  normalArgs,
-			panic: false,
+			name:      "success sorting with field Id",
+			args:      normalArgs,
+			wantError: false,
 		},
 		{
-			name:  "should be panic when not pointer",
-			args:  invalidValue,
-			panic: true,
-		},
-		{
-			name:  "should be panic when doesn have field ID or Id",
-			args:  invalidNotHaveField,
-			panic: true,
+			name:      "should be panic when not pointer",
+			args:      invalidValue,
+			wantError: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if tt.panic {
-				shouldPanic(t, sortby.ByID, tt.args)
+			err := sortby.MongoID(tt.args)
+			if (err != nil) != tt.wantError {
+				t.Errorf("should be error")
 				return
 			}
-			sortby.ByID(tt.args)
 			for i, v := range data {
 				if v != sortedData[i] {
 					t.Errorf("data not same")
@@ -104,24 +79,25 @@ func TestByID(t *testing.T) {
 	}
 }
 
-func TestByIDReverse(t *testing.T) {
+func TestMongoIDReverse(t *testing.T) {
 	sortingIndicatorIndex := []int{0, 2, 3, 4, 1}
 	lenData := len(sortingIndicatorIndex)
 	data := createTestingData(lenData)
-	sortingIndicator := make(map[bson.ObjectId]int)
+	var sortingIndicator []bson.ObjectId
 	var sortedData []TestingData
-	for i, v := range sortingIndicatorIndex {
-		sortingIndicator[data[v].Id] = i
+	for _, v := range sortingIndicatorIndex {
+		sortingIndicator = append(sortingIndicator, data[v].Id)
 		sortedData = append(sortedData, data[v])
 	}
-	normalArgs := sortby.ParamSortByID{
+	normalArgs := sortby.ParamMongoID{
 		Indicator: sortingIndicator,
 		Value:     &data,
 		Reverse:   true,
+		FieldName: "Id",
 	}
 	tests := []struct {
 		name string
-		args sortby.ParamSortByID
+		args sortby.ParamMongoID
 	}{
 		// TODO: Add test cases.
 		{
@@ -131,7 +107,7 @@ func TestByIDReverse(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sortby.ByID(tt.args)
+			sortby.MongoID(tt.args)
 			for i, v := range data {
 				if v != sortedData[lenData-i-1] {
 					t.Errorf("data not same")
@@ -140,10 +116,4 @@ func TestByIDReverse(t *testing.T) {
 			}
 		})
 	}
-}
-
-func shouldPanic(t *testing.T, f func(sortby.ParamSortByID), p sortby.ParamSortByID) {
-	defer func() { recover() }()
-	f(p)
-	t.Errorf("should have panicked")
 }

@@ -3,31 +3,29 @@ package sortby
 import (
 	"errors"
 	"reflect"
-
-	"github.com/globalsign/mgo/bson"
 )
 
-// MongoID will sort pointer slice of struct based on field name. if struct doesn't have field name will sort by Id
-func MongoID(ps ParamMongoID) error {
+//StringSort will sorting by index slice of string
+func StringSort(ps ParamsByString) error {
 	resultv := reflect.ValueOf(ps.Value)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {
 		return errors.New("sort value not pointer")
 	}
-	exec := byID(ps)
+	exec := byString(ps)
 	return executeSort(&exec)
 }
 
-func (s *byID) SetIndicatorIndex() {
-	indicatorIndex := make(map[bson.ObjectId]int)
+func (s *byString) SetIndicatorIndex() {
+	indicatorIndex := make(map[string]int)
 	for i, v := range s.Indicator {
 		indicatorIndex[v] = i
 	}
 	s.indicatorIndex = indicatorIndex
 }
 
-func (s *byID) CheckFieldName() error {
+func (s *byString) CheckFieldName() error {
 	if s.FieldName == "" {
-		s.FieldName = "Id"
+		return errors.New("FieldName is Required")
 	}
 	v := reflect.ValueOf(s.Value).Elem()
 	getField := v.Index(0).FieldByName(s.FieldName)
@@ -37,21 +35,21 @@ func (s *byID) CheckFieldName() error {
 	return nil
 }
 
-func (s *byID) Len() int {
+func (s *byString) Len() int {
 	return reflect.ValueOf(s.Value).Elem().Len()
 }
 
-func (s *byID) Less(i, j int) bool {
+func (s *byString) Less(i, j int) bool {
 	v := reflect.ValueOf(s.Value).Elem()
-	indexI := s.indicatorIndex[v.Index(i).FieldByName(s.FieldName).Interface().(bson.ObjectId)]
-	indexJ := s.indicatorIndex[v.Index(j).FieldByName(s.FieldName).Interface().(bson.ObjectId)]
+	indexI := s.indicatorIndex[v.Index(i).FieldByName(s.FieldName).Interface().(string)]
+	indexJ := s.indicatorIndex[v.Index(j).FieldByName(s.FieldName).Interface().(string)]
 	if s.Reverse {
 		return indexI > indexJ
 	}
 	return indexI < indexJ
 }
 
-func (s *byID) Swap(i, j int) {
+func (s *byString) Swap(i, j int) {
 	v := reflect.ValueOf(s.Value).Elem()
 	tempI := v.Index(i)
 	tempJ := v.Index(j)
