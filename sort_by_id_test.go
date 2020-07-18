@@ -3,7 +3,7 @@ package sortby_test
 import (
 	"testing"
 
-	sortby "github.com/ahsanulks/sort-by"
+	"github.com/ahsanulks/sortby"
 	"github.com/bxcodec/faker"
 	"github.com/globalsign/mgo/bson"
 )
