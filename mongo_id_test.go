@@ -3,7 +3,7 @@ package sortby_test
 import (
 	"testing"
 
-	"github.com/ahsanulks/sortby"
+	sortby "github.com/ahsanulks/sortix"
 	"github.com/globalsign/mgo/bson"
 	"github.com/icrowley/fake"
 	"github.com/stretchr/testify/assert"
