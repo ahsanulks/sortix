@@ -1,7 +1,5 @@
 package sortby
 
-import "sort"
-
 type sortingBy interface {
 	SetIndicatorIndex()
 	CheckFieldName() error
@@ -10,24 +8,8 @@ type sortingBy interface {
 	Swap(i, j int)
 }
 
-func executeSort(params sortingBy) error {
-	err := params.CheckFieldName()
-	if err != nil {
-		return err
-	}
-	params.SetIndicatorIndex()
-	sort.Sort(params)
-	return nil
+//SortixService is for sort or reverse sort by field name
+type SortixService interface {
+	SortBy(fieldName string) error
+	ReverseSortBy(fieldName string) error
 }
-
-// func MongoDBID([]bson.ObjectID, interface{}) {
-
-// }
-
-// func Strings([]string, interface{}) {
-
-// }
-
-// func Ints([]ints, interface{}) {
-
-// }
