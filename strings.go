@@ -7,7 +7,7 @@ import (
 )
 
 // Strings will sorting by index slice of string
-func Strings(data interface{}, reference []string) (SortixService, error) {
+func Strings(data interface{}, reference []string) (sortixService, error) {
 	resultv := reflect.ValueOf(data)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {
 		return nil, errors.New("sort value not pointer")

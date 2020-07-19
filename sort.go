@@ -9,7 +9,7 @@ type sortingBy interface {
 }
 
 // SortixService is for sort or reverse sort by field name
-type SortixService interface {
-	SortBy(fieldName string) error
-	ReverseSortBy(fieldName string) error
+type sortixService interface {
+	SortBy(fieldName string) error        // will sort data from reference by fieldname. fieldname is case sensitive
+	ReverseSortBy(fieldName string) error // will sort data from reference by fieldname with reverse order. fieldname is case sensitive
 }
