@@ -9,7 +9,7 @@ import (
 )
 
 // MongoID will sort pointer slice of struct based on field name. if struct doesn't have field name will sort by Id
-func MongoID(data interface{}, reference []bson.ObjectId) (SortixService, error) {
+func MongoID(data interface{}, reference []bson.ObjectId) (sortixService, error) {
 	resultv := reflect.ValueOf(data)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {
 		return nil, errors.New("sort value not pointer slice")

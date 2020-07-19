@@ -7,7 +7,7 @@ import (
 )
 
 // Integers will sorting by index slice of int
-func Integers(data interface{}, reference []int) (SortixService, error) {
+func Integers(data interface{}, reference []int) (sortixService, error) {
 	resultv := reflect.ValueOf(data)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {
 		return nil, errors.New("sort value not pointer")
