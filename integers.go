@@ -6,7 +6,7 @@ import (
 	"sort"
 )
 
-// Integers will sorting by index slice of int
+// Integers will sort data pointer slice of struct based on reference slice of int
 func Integers(data interface{}, reference []int) (sortixService, error) {
 	resultv := reflect.ValueOf(data)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {

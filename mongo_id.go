@@ -8,7 +8,7 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
-// MongoID will sort pointer slice of struct based on field name. if struct doesn't have field name will sort by Id
+// MongoID will sort data pointer slice of struct based on reference slice of bson.ObjectId
 func MongoID(data interface{}, reference []bson.ObjectId) (sortixService, error) {
 	resultv := reflect.ValueOf(data)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {
