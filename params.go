@@ -1,4 +1,4 @@
-package sortby
+package sortix
 
 import (
 	"github.com/globalsign/mgo/bson"
@@ -25,3 +25,13 @@ type paramsByString struct {
 }
 
 type byString paramsByString
+
+type paramsByInteger struct {
+	indicator      []int       // will order by this indicator from 0 to len(indicator)
+	data           interface{} // pointer from slice of struct, if not pointer will panic
+	reverse        bool        // when true will reverse order from indicator
+	fieldName      string      // field that want to reference for sorting
+	indicatorIndex map[int]int
+}
+
+type byInteger paramsByInteger

@@ -1,6 +1,7 @@
-package sortby_test
+package sortix_test
 
 import (
+	"strconv"
 	"testing"
 
 	sortby "github.com/ahsanulks/sortix"
@@ -13,15 +14,19 @@ type TestingData struct {
 	Id    bson.ObjectId
 	Name  string
 	Email string
+	Phone int
 }
 
 func createTestingData(len int) []TestingData {
 	var result []TestingData
 	for i := 0; i < len; i++ {
+		digit := fake.DigitsN(6)
+		intDigit, _ := strconv.Atoi(digit)
 		testData := TestingData{
 			Id:    bson.NewObjectId(),
 			Name:  fake.CharactersN(10),
 			Email: fake.EmailAddress(),
+			Phone: intDigit,
 		}
 		result = append(result, testData)
 	}
@@ -69,6 +74,12 @@ func Test_byID_SortBy(t *testing.T) {
 			args:    args{&noData, sortingIndicator, "Id"},
 			wantErr: false,
 			len0:    true,
+		},
+		{
+			name:    "when field not mongo_id",
+			args:    args{&data, sortingIndicator, "Email"},
+			wantErr: true,
+			len0:    false,
 		},
 		{
 			name:    "normal case",
@@ -142,6 +153,12 @@ func Test_byID_ReverseSortBy(t *testing.T) {
 			args:    args{&noData, sortingIndicator, "Id"},
 			wantErr: false,
 			len0:    true,
+		},
+		{
+			name:    "when field not mongo_id",
+			args:    args{&data, sortingIndicator, "Email"},
+			wantErr: true,
+			len0:    false,
 		},
 		{
 			name:    "normal case",

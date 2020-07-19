@@ -1,4 +1,4 @@
-package sortby
+package sortix
 
 type sortingBy interface {
 	SetIndicatorIndex()

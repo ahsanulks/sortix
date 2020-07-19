@@ -1,4 +1,4 @@
-package sortby
+package sortix
 
 import (
 	"errors"
@@ -22,12 +22,17 @@ func MongoID(data interface{}, reference []bson.ObjectId) (SortixService, error)
 	return &service, nil
 }
 
-func (s *byID) SortBy(fieldName string) error {
+func (s *byID) SortBy(fieldName string) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = errors.New("error when sorting")
+		}
+	}()
 	if s.Len() == 0 || s.Len() == 1 {
 		return nil
 	}
 	s.fieldName = fieldName
-	err := s.CheckFieldName()
+	err = s.CheckFieldName()
 	if err != nil {
 		return err
 	}
@@ -36,12 +41,17 @@ func (s *byID) SortBy(fieldName string) error {
 	return nil
 }
 
-func (s *byID) ReverseSortBy(fieldName string) error {
+func (s *byID) ReverseSortBy(fieldName string) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = errors.New("error when sorting")
+		}
+	}()
 	if s.Len() == 0 || s.Len() == 1 {
 		return nil
 	}
 	s.fieldName = fieldName
-	err := s.CheckFieldName()
+	err = s.CheckFieldName()
 	if err != nil {
 		return err
 	}

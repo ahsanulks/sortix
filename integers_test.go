@@ -3,25 +3,26 @@ package sortix_test
 import (
 	"testing"
 
+	"github.com/ahsanulks/sortix"
 	sortby "github.com/ahsanulks/sortix"
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_byString_SortBy(t *testing.T) {
+func Test_byInteger_SortBy(t *testing.T) {
 	sortingIndicatorIndex := []int{0, 2, 3, 4, 1}
 	lenData := len(sortingIndicatorIndex)
 	data := createTestingData(lenData)
 	data2 := data
-	var sortingIndicator []string
+	var sortingIndicator []int
 	var sortedData []TestingData
 	for _, v := range sortingIndicatorIndex {
-		sortingIndicator = append(sortingIndicator, data[v].Email)
+		sortingIndicator = append(sortingIndicator, data[v].Phone)
 		sortedData = append(sortedData, data[v])
 	}
 	var noData []TestingData
 	type args struct {
 		data      interface{}
-		indicator []string
+		indicator []int
 		fieldName string
 	}
 	tests := []struct {
@@ -33,7 +34,7 @@ func Test_byString_SortBy(t *testing.T) {
 		// TODO: Add test cases.
 		{
 			name:    "field name not found",
-			args:    args{&data, sortingIndicator, "ID"},
+			args:    args{&data, sortingIndicator, "Telephone"},
 			wantErr: true,
 			len0:    false,
 		},
@@ -45,29 +46,29 @@ func Test_byString_SortBy(t *testing.T) {
 		},
 		{
 			name:    "len data 0",
-			args:    args{&noData, sortingIndicator, "Email"},
+			args:    args{&noData, sortingIndicator, "Phone"},
 			wantErr: false,
 			len0:    true,
 		},
 		{
-			name:    "when field not string",
+			name:    "when field not a integer",
 			args:    args{&data, sortingIndicator, "Id"},
 			wantErr: true,
 			len0:    false,
 		},
 		{
 			name:    "normal case",
-			args:    args{&data, sortingIndicator, "Email"},
+			args:    args{&data, sortingIndicator, "Phone"},
 			wantErr: false,
 			len0:    false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sortService, _ := sortby.Strings(tt.args.data, tt.args.indicator)
+			sortService, _ := sortix.Integers(tt.args.data, tt.args.indicator)
 			err := sortService.SortBy(tt.args.fieldName)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("byString.SortBy() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("byIntegers.SortBy() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if tt.wantErr {
 				return
@@ -86,21 +87,21 @@ func Test_byString_SortBy(t *testing.T) {
 	}
 }
 
-func Test_byString_ReverseSortBy(t *testing.T) {
+func Test_byInteger_ReverseSortBy(t *testing.T) {
 	sortingIndicatorIndex := []int{0, 2, 3, 4, 1}
 	lenData := len(sortingIndicatorIndex)
 	data := createTestingData(lenData)
 	data2 := data
-	var sortingIndicator []string
+	var sortingIndicator []int
 	var sortedData []TestingData
 	for _, v := range sortingIndicatorIndex {
-		sortingIndicator = append(sortingIndicator, data[v].Email)
+		sortingIndicator = append(sortingIndicator, data[v].Phone)
 		sortedData = append(sortedData, data[v])
 	}
 	var noData []TestingData
 	type args struct {
 		data      interface{}
-		indicator []string
+		indicator []int
 		fieldName string
 	}
 	tests := []struct {
@@ -112,7 +113,7 @@ func Test_byString_ReverseSortBy(t *testing.T) {
 		// TODO: Add test cases.
 		{
 			name:    "field name not found",
-			args:    args{&data, sortingIndicator, "ID"},
+			args:    args{&data, sortingIndicator, "Telephone"},
 			wantErr: true,
 			len0:    false,
 		},
@@ -124,29 +125,35 @@ func Test_byString_ReverseSortBy(t *testing.T) {
 		},
 		{
 			name:    "len data 0",
-			args:    args{&noData, sortingIndicator, "Email"},
+			args:    args{&noData, sortingIndicator, "Phone"},
 			wantErr: false,
 			len0:    true,
 		},
 		{
-			name:    "when field not string",
+			name:    "when field not a integer",
+			args:    args{&data, sortingIndicator, "Id"},
+			wantErr: true,
+			len0:    false,
+		},
+		{
+			name:    "when field not a integer",
 			args:    args{&data, sortingIndicator, "Id"},
 			wantErr: true,
 			len0:    false,
 		},
 		{
 			name:    "normal case",
-			args:    args{&data, sortingIndicator, "Email"},
+			args:    args{&data, sortingIndicator, "Phone"},
 			wantErr: false,
 			len0:    false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sortService, _ := sortby.Strings(tt.args.data, tt.args.indicator)
+			sortService, _ := sortby.Integers(tt.args.data, tt.args.indicator)
 			err := sortService.ReverseSortBy(tt.args.fieldName)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("byString.ReverseSortBy() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("byIntegers.ReverseSortBy() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if tt.wantErr {
 				return
@@ -165,17 +172,17 @@ func Test_byString_ReverseSortBy(t *testing.T) {
 	}
 }
 
-func TestStrings(t *testing.T) {
+func TestIntegers(t *testing.T) {
 	sortingIndicatorIndex := []int{0, 2, 3, 4, 1}
 	lenData := len(sortingIndicatorIndex)
 	data := createTestingData(lenData)
-	var sortingIndicator []string
+	var sortingIndicator []int
 	for _, v := range sortingIndicatorIndex {
-		sortingIndicator = append(sortingIndicator, data[v].Email)
+		sortingIndicator = append(sortingIndicator, data[v].Phone)
 	}
 	type args struct {
 		data      interface{}
-		reference []string
+		reference []int
 	}
 	tests := []struct {
 		name    string
@@ -199,9 +206,9 @@ func TestStrings(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := sortby.Strings(tt.args.data, tt.args.reference)
+			got, err := sortby.Integers(tt.args.data, tt.args.reference)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("sortby.Strings() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("sortby.Integers() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !tt.wantNil {
