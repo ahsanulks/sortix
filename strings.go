@@ -6,7 +6,7 @@ import (
 	"sort"
 )
 
-//Strings will sorting by index slice of string
+// Strings will sorting by index slice of string
 func Strings(data interface{}, reference []string) (SortixService, error) {
 	resultv := reflect.ValueOf(data)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {

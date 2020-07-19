@@ -8,7 +8,7 @@ type sortingBy interface {
 	Swap(i, j int)
 }
 
-//SortixService is for sort or reverse sort by field name
+// SortixService is for sort or reverse sort by field name
 type SortixService interface {
 	SortBy(fieldName string) error
 	ReverseSortBy(fieldName string) error
