@@ -39,6 +39,10 @@ user := []struct {
     Id: 10,
     Name: "Ali",
   },
+  {
+    Id: 6,
+    Name: "Stuard",
+  },
 }
 
 sortIndicator := []int{10,5,1}
@@ -47,7 +51,7 @@ if err != nil {
   panic(err)
 }
 srtix.SortBy("Id")
-// Output: [{Id:10 Name:Ali} {Id:5 Name:John} {Id:1 Name:Wing}]
+// Output: [{Id:10 Name:Ali} {Id:5 Name:John} {Id:1 Name:Wing} {Id:6 Name:Stuard}]
 ```
 
 ## With Reverse Reference Order
@@ -68,15 +72,19 @@ user := []struct {
     Id: 10,
     Name: "Ali",
   },
+  {
+    Id: 6,
+    Name: "Stuard",
+  },
 }
 
-indicator := []int{10,5,1}
+indicator := []int{10,5,1,6}
 srtix, err := sortix.Integers(&user,indicator)
 if err != nil {
   panic(err)
 }
 srtix.ReverseSortBy("Id") // must valid field name on struct
-// Output: [{Id:1 Name:Wing} {Id:5 Name:John} {Id:10 Name:Ali}]
+// Output: [{Id:6 Name:Stuard} {Id:1 Name:Wing} {Id:5 Name:John} {Id:10 Name:Ali}]
 ```
 
 # Available Sort Data
