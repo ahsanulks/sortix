@@ -45,7 +45,7 @@ user := []struct {
   },
 }
 
-sortIndicator := []int{10,5,1}
+sortIndicator := []int{10,5,1,6}
 srtix, err := sortix.Integers(&user,sortIndicator)
 if err != nil {
   panic(err)
